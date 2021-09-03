@@ -1,0 +1,6 @@
+ITS ALIVE ITS ALIVE: result = 10
+
+I WISH I KNEW HOW TO QUIT YOU: result < 1
+    SAY HELLO TO MY LITTLE FRIEND: result
+    MAKE IT HAPPEN: result - 1
+ILL BE BACK:
