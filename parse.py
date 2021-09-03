@@ -34,7 +34,6 @@ class Parser:
 
 
     def parse(self, tokens):
-        self.print_tokens(tokens)
         parsed_tokens = []
 
         for i,line in enumerate(tokens):
@@ -47,7 +46,7 @@ class Parser:
                     opToken = self.parse_op(operation)
                     parsed_tokens.append(opToken)
 
-                if operation.name in ("PRINT"):
+                if operation.name in ("PRINT","INPUT","INT INPUT"):
                     funcToken = self.parse_func(operation)
                     parsed_tokens.append(funcToken)
 
@@ -55,19 +54,8 @@ class Parser:
                     varToken = self.parse_var(operation)
                     parsed_tokens.append(varToken)
 
-
-        for op in parsed_tokens:
-            if op.tag == "BLOCK":
-                self.print_block_token(op)
-
-            if op.tag == "BIN OP":
-                self.print_bin_token(op)
-
-            if op.tag == "FUNCTION":
-                self.print_func(op)
-            
-            if op.tag == "DECLARATION":
-                self.print_var(op)
+        self.print_parsed_tokens(parsed_tokens)
+        return parsed_tokens
 
             
     def parse_var(self,operation):
@@ -152,3 +140,18 @@ class Parser:
     def print_var(self, token):
         print(token.tag,":",token.name,"=",token.value)
         print("")
+
+    
+    def print_parsed_tokens(self, parsed_tokens):
+        for op in parsed_tokens:
+            if op.tag == "BLOCK":
+                self.print_block_token(op)
+
+            if op.tag == "BIN OP":
+                self.print_bin_token(op)
+
+            if op.tag == "FUNCTION":
+                self.print_func(op)
+            
+            if op.tag == "DECLARATION":
+                self.print_var(op)

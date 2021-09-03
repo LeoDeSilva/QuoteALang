@@ -1,38 +1,24 @@
-import sys
+def parse_DECLARATION():
+    print("DECLAREITN")
 
-from lexer import Lexer
-from parse import Parser
+def parse_FUNCTION():
+    print("FUNCTIN")
 
-command_list = {
-    "ITS ALIVE ITS ALIVE":"DECLARATION",
-    "I WISH I KNEW HOW TO QUIT YOU":"WHILE",
-    "ILL BE BACK":"END WHILE",
-    "SAY HELLO TO MY LITTLE FRIEND":"PRINT",
-    "MAKE IT HAPPEN":"CALCULATE",
-    "YOUVE GOT TO ASK YOURSELF ONE QUESTION":"IF",
-    "IM GOING TO MAKE HIM AN OFFER HE CANT REFUSE":"ELSE",
-    "FRANKLY MY DEAR I DONT GIVE A DAMN":"END IF",
-    "YOU CANT HANDLE THE TRUTH":"FALSE",
-    "YOU HAD ME AT HELLO":"TRUE",
-    "YOU TALKIN TO ME":"INPUT",
-    "SHOW ME THE MONEY":"INT INPUT"
+
+
+intrepret_functions = {
+    "DECLARATION": parse_DECLARATION(),
+    "FUNCTION": parse_FUNCTION(),
 }
 
-keywords = {
-    "and":"AND",
-    "or":"OR",
-}
 
-program = []
+class Interpreter:
+    def __init__(self):
+        self.variables = {}
+    
 
-with open(sys.argv[1],"r") as f:
-    for line in f:
-        if (line.strip() == ""): continue
-        formatted_line = line.strip()
-        program.append(formatted_line)
+    def interpret(self, parsed_tokens):
+        for token in parsed_tokens:
+            print(token.tag)
 
-lexer = Lexer(program,keywords)
-parser = Parser()
-
-tokens = lexer.lex(command_list)
-parsed_tokens = parser.parse(tokens)
+    
