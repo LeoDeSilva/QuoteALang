@@ -35,11 +35,11 @@ class Parser:
 
     def parse(self, tokens):
         parsed_tokens = []
-
-        for i,line in enumerate(tokens):
-            for operation in line:
+        i = 0
+        while i < len(tokens): 
+            for operation in tokens[i]:
                 if operation.name in ("WHILE","IF"):
-                    blockToken = self.parse_block(operation,tokens,i)
+                    blockToken,i = self.parse_block(operation,tokens,i)
                     parsed_tokens.append(blockToken)
                 
                 if operation.name in ("CALCULATE"):
@@ -53,8 +53,8 @@ class Parser:
                 if operation.name in ("DECLARATION"):
                     varToken = self.parse_var(operation)
                     parsed_tokens.append(varToken)
+                i += 1
 
-        self.print_parsed_tokens(parsed_tokens)
         return parsed_tokens
 
             
@@ -89,10 +89,10 @@ class Parser:
                 blockToken.condition = BinOpToken(op.name, operation.code[j-1], operation.code[j+1])   
 
         target_op = "END " + operation.name
-        block_code = self.locate_op(tokens, target_op,i)
-        blockToken.code = block_code
+        block_code,end_pos = self.locate_op(tokens, target_op,i)
+        blockToken.code = self.parse(block_code)
 
-        return blockToken
+        return blockToken, end_pos
 
     
     def locate_op(self,tokens, target_op,i):
@@ -103,55 +103,12 @@ class Parser:
             line = tokens[i]
             for operation in line:
                 if operation.name == target_op:
-                    return block_code
+                    return block_code,i
                 else:
-                    block_code.append(operation)
+                    block_code.append([operation])
             i += 1
+
+
         
                
-    def print_tokens(self,tokens):
-        for line in tokens:
-            for token in line:
-                print(token.name)
-                for op in token.code:
-                    print("\t",op.name,op.code)
-        print("")
-
-    
-    def print_block_token(self,blockToken):
-        print(blockToken.name,":",blockToken.condition.left.code,blockToken.condition.name,blockToken.condition.right.code)
-        for op in blockToken.code:
-            print("\t",op.name,)
-        print("")
-
-    
-    def print_bin_token(self,token):
-        print("CALCULATE",token.left.name,token.left.code, token.name, token.right.name,token.right.code)
-        print("")
-
-
-    def print_func(self,token):
-        print(token.name)
-        for op in token.parameters:
-            print("\t",op.name, op.code)
-        print("")
-
-
-    def print_var(self, token):
-        print(token.tag,":",token.name,"=",token.value)
-        print("")
-
-    
-    def print_parsed_tokens(self, parsed_tokens):
-        for op in parsed_tokens:
-            if op.tag == "BLOCK":
-                self.print_block_token(op)
-
-            if op.tag == "BIN OP":
-                self.print_bin_token(op)
-
-            if op.tag == "FUNCTION":
-                self.print_func(op)
-            
-            if op.tag == "DECLARATION":
-                self.print_var(op)
+   

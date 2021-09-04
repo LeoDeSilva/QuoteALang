@@ -33,9 +33,10 @@ with open(sys.argv[1],"r") as f:
         program.append(formatted_line)
 
 lexer = Lexer(program,keywords)
-parser = Parser()
-interpreter = Interpreter()
-
 tokens = lexer.lex(command_list)
+
+parser = Parser()
 parsed_tokens = parser.parse(tokens)
+
+interpreter = Interpreter(parsed_tokens)
 interpreter.interpret(parsed_tokens)

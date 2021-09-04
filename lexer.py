@@ -25,6 +25,7 @@ class Lexer:
     def lex(self, command_list):  # sourcery skip: hoist-statement-from-loop
         tokens = []
         for line in self.program:
+            if line[0] == "#": continue
             pos = 0
             command_line = []
             command = line.split(":")[0].upper()
@@ -32,7 +33,7 @@ class Lexer:
             operand_tokens = []
 
             if command not in command_list:
-                print("INVALID COMMAND")
+                print("Invalid Command:",command)
                 quit()
 
             operand_tokens = self.parse_operand(operand,line,pos)
@@ -48,8 +49,9 @@ class Lexer:
         tokens = []
         
         while pos < len(operand):
-
-            if operand[pos] == "=":
+            if operand[pos] == "#":
+                break
+            elif operand[pos] == "=":
                 token, pos = self.handle_symbols(operand,pos,"EQUAL","EQUIVALENT")
                 tokens.append(token)
             elif operand[pos] == "!":
